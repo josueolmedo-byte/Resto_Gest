@@ -6,8 +6,8 @@ namespace Resto_Gest
 {
     public class Mesa
     {
-        private int Numero { get; set; }
-        private string Estado { get; set; } // "Libre", "Ocupada", "Solicitando Cuenta"
+        public int Numero { get; set; }
+        public string Estado { get; set; } // "Libre", "Ocupada", "Solicitando Cuenta"
 
         public Mesa(int numero)
         {
