@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Resto_Gest;
 
-namespace RestoGest
+namespace Resto_Gest
 {
     public class Program
     {
@@ -10,6 +9,9 @@ namespace RestoGest
         public static List<ItemMenu> MenuPlatos = new List<ItemMenu>();
         public static List<Mesa> Mesas = new List<Mesa>();
         public static List<Pedido> Pedidos = new List<Pedido>();
+
+        // Variable global para las ventas 
+        public static double TotalVentasDelDia = 0;
 
         static void Main(string[] args)
         {
@@ -50,13 +52,13 @@ namespace RestoGest
                             Console.WriteLine("\n[En desarrollo por Integrante 2]");
                             break;
                         case 4:
-                            Console.WriteLine("\n[En desarrollo por Integrante 3]");
+                            VerColaCocina();
                             break;
                         case 5:
-                            Console.WriteLine("\n[En desarrollo por Integrante 3]");
+                            ProcesarPagoMesa();
                             break;
                         case 6:
-                            Console.WriteLine("\n[En desarrollo por Integrante 3]");
+                            VerReporteVentas();
                             break;
                         case 7:
                             Console.WriteLine("\nSaliendo del sistema...");
@@ -72,6 +74,94 @@ namespace RestoGest
                     Console.ReadKey();
                 }
             } while (opcion != 7);
+        }
+
+        public static void VerColaCocina()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("       COLA DE PEDIDOS EN COCINA        ");
+            Console.WriteLine("========================================");
+            if (Pedidos.Count == 0)
+            {
+                Console.WriteLine("No hay pedidos registrados en cocina.");
+                return;
+            }
+
+            foreach (var ped in Pedidos)
+            {
+                Console.WriteLine($"\nPedido #{ped.Id} | Mesa #{ped.NumeroMesa} | Mesero: {ped.Mesero} | Estado: {ped.Estado}");
+                Console.WriteLine("Platos/Bebidas a preparar:");
+                foreach (var plato in ped.Platos)
+                {
+                    Console.WriteLine($"  - {plato.Nombre} ({plato.Categoria})");
+                }
+            }
+        }
+
+        public static void ProcesarPagoMesa()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("     GENERAR CUENTA Y PROCESAR PAGO     ");
+            Console.WriteLine("========================================");
+            Console.Write("Ingrese el número de mesa a cobrar: ");
+
+            if (int.TryParse(Console.ReadLine(), out int numMesa))
+            {
+                // Se agrega ?? "" para evitar advertencias de posible valor nulo
+                Pedido? pedidoMesa = Pedidos.Find(p => p.NumeroMesa == numMesa);
+
+                if (pedidoMesa != null)
+                {
+                    double subtotal = 0;
+                    Console.WriteLine($"\n--- DETALLE DE CONSUMO (MESA {numMesa}) ---");
+                    foreach (var item in pedidoMesa.Platos)
+                    {
+                        Console.WriteLine($"- {item.Nombre}: ${item.Precio}");
+                        subtotal += item.Precio;
+                    }
+
+                    double iva = subtotal * 0.15; // 15% IVA
+                    double total = subtotal + iva;
+
+                    Console.WriteLine("----------------------------------------");
+                    Console.WriteLine($"Subtotal:   ${subtotal:F2}");
+                    Console.WriteLine($"IVA (15%):  ${iva:F2}");
+                    Console.WriteLine($"TOTAL:      ${total:F2}");
+                    Console.WriteLine("----------------------------------------");
+
+                    Console.Write("¿Confirmar pago y cerrar mesa? (S/N): ");
+                    string op = Console.ReadLine() ?? "";
+                    if (op.ToUpper() == "S")
+                    {
+                        TotalVentasDelDia += total; // Acumular venta
+
+                        // Cambiar estado de la mesa a Libre
+                        Mesa? mesa = Mesas.Find(m => m.Numero == numMesa);
+                        if (mesa != null) mesa.Estado = "Libre";
+
+                        // Eliminar el pedido de la lista activa
+                        Pedidos.Remove(pedidoMesa);
+
+                        Console.WriteLine("\n¡Pago procesado con éxito y mesa liberada!");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nNo se encontró ningún pedido activo para esa mesa.");
+                }
+            }
+        }
+
+        public static void VerReporteVentas()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("     REPORTE DE VENTAS DEL TURNO        ");
+            Console.WriteLine("========================================");
+            Console.WriteLine($"Total recaudado en caja hoy: ${TotalVentasDelDia:F2}");
+            Console.WriteLine("========================================");
         }
     }
 }
