@@ -44,10 +44,10 @@ namespace RestoGest
                             GestionarMenu();
                             break;
                         case 2:
-                            Console.WriteLine("\n[En desarrollo por Integrante 2]");
+                            VerEstadoMesas();
                             break;
                         case 3:
-                            Console.WriteLine("\n[En desarrollo por Integrante 2]");
+                            AperturarMesaYPedido();
                             break;
                         case 4:
                             Console.WriteLine("\n[En desarrollo por Integrante 3]");
@@ -114,6 +114,91 @@ namespace RestoGest
                     {
                         Console.WriteLine($"ID: {item.Id} | {item.Nombre} | Precio: ${item.Precio:F2} | Cat: {item.Categoria}");
                     }
+                }
+            }
+        }
+
+        public static void VerEstadoMesas()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("         ESTADO DE LAS MESAS            ");
+            Console.WriteLine("========================================");
+
+            foreach (var mesa in Mesas)
+            {
+                Console.WriteLine($"Mesa #{mesa.Numero} ---> Estado: [{mesa.Estado}]");
+            }
+        }
+
+        public static void AperturarMesaYPedido()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("    APERTURAR MESA Y REGISTRAR PEDIDO   ");
+            Console.WriteLine("========================================");
+
+            Console.Write("Ingrese el número de mesa (1 al 5): ");
+            if (int.TryParse(Console.ReadLine(), out int numMesa))
+            {
+                Mesa mesa = Mesas.Find(m => m.Numero == numMesa);
+                if (mesa == null)
+                {
+                    Console.WriteLine("Mesa no encontrada.");
+                    return;
+                }
+
+                if (mesa.Estado == "Ocupada")
+                {
+                    Console.WriteLine("Esta mesa ya se encuentra ocupada.");
+                    return;
+                }
+
+                Console.Write("Nombre del mesero responsable: ");
+                string mesero = Console.ReadLine();
+
+                int nuevoIdPedido = Pedidos.Count + 1;
+                Pedido nuevoPedido = new Pedido(nuevoIdPedido, numMesa, mesero);
+
+                if (MenuPlatos.Count == 0)
+                {
+                    Console.WriteLine("\nNo hay platos en el menú.");
+                    return;
+                }
+
+                string agregarMas = "S";
+                while (agregarMas.ToUpper() == "S")
+                {
+                    Console.WriteLine("\n--- MENÚ DISPONIBLE ---");
+                    foreach (var item in MenuPlatos)
+                    {
+                        Console.WriteLine($"ID: {item.Id} | {item.Nombre} - ${item.Precio}");
+                    }
+
+                    Console.Write("Ingrese el ID del plato/bebida a añadir: ");
+                    if (int.TryParse(Console.ReadLine(), out int idItem))
+                    {
+                        ItemMenu itemElegido = MenuPlatos.Find(i => i.Id == idItem);
+                        if (itemElegido != null)
+                        {
+                            nuevoPedido.Platos.Add(itemElegido);
+                            Console.WriteLine($"¡{itemElegido.Nombre} agregado al pedido!");
+                        }
+                        else
+                        {
+                            Console.WriteLine("ID de item no válido.");
+                        }
+                    }
+
+                    Console.Write("¿Desea agregar otro plato? (S/N): ");
+                    agregarMas = Console.ReadLine();
+                }
+
+                if (nuevoPedido.Platos.Count > 0)
+                {
+                    Pedidos.Add(nuevoPedido);
+                    mesa.Estado = "Ocupada";
+                    Console.WriteLine($"\n¡Pedido #{nuevoPedido.Id} registrado exitosamente para la Mesa #{numMesa}!");
                 }
             }
         }
