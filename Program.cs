@@ -43,7 +43,7 @@ namespace Resto_Gest
                     switch (opcion)
                     {
                         case 1:
-                            Console.WriteLine("\n[En desarrollo por Integrante 1]");
+                            GestionarMenu();
                             break;
                         case 2:
                             Console.WriteLine("\n[En desarrollo por Integrante 2]");
@@ -162,6 +162,49 @@ namespace Resto_Gest
             Console.WriteLine("========================================");
             Console.WriteLine($"Total recaudado en caja hoy: ${TotalVentasDelDia:F2}");
             Console.WriteLine("========================================");
+        }
+        public static void GestionarMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("========================================");
+            Console.WriteLine("        GESTIÓN DEL MENÚ DIGITAL        ");
+            Console.WriteLine("========================================");
+            Console.WriteLine("1. Registrar nuevo Plato/Bebida");
+            Console.WriteLine("2. Ver Menú de Platos Registrados");
+            Console.Write("Seleccione una opción: ");
+            string op = Console.ReadLine();
+
+            if (op == "1")
+            {
+                Console.Write("Nombre del plato/bebida: ");
+                string nombre = Console.ReadLine();
+
+                Console.Write("Precio ($): ");
+                double.TryParse(Console.ReadLine(), out double precio);
+
+                Console.Write("Categoría (Plato Fuerte / Entrada / Bebida / Postre): ");
+                string categoria = Console.ReadLine();
+
+                int nuevoId = MenuPlatos.Count + 1;
+                MenuPlatos.Add(new ItemMenu(nuevoId, nombre, precio, categoria));
+
+                Console.WriteLine("\n¡Plato/Bebida registrado en el menú con éxito!");
+            }
+            else if (op == "2")
+            {
+                Console.WriteLine("\n--- MENÚ ACTUAL DEL RESTAURANTE ---");
+                if (MenuPlatos.Count == 0)
+                {
+                    Console.WriteLine("El menú está vacío por ahora.");
+                }
+                else
+                {
+                    foreach (var item in MenuPlatos)
+                    {
+                        Console.WriteLine($"ID: {item.Id} | {item.Nombre} | Precio: ${item.Precio:F2} | Cat: {item.Categoria}");
+                    }
+                }
+            }
         }
     }
 }

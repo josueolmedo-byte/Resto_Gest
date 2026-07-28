@@ -11,7 +11,6 @@ namespace Resto_Gest
         public List<ItemMenu> Platos { get; set; } = new List<ItemMenu>();
         public string Estado { get; set; } // "Pendiente", "En Preparacion", "Entregado"
         public string Mesero { get; set; }
-
         public Pedido(int id, int numeroMesa, string mesero)
         {
             Id = id;
