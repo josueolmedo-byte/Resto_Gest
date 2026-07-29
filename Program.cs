@@ -15,6 +15,9 @@ namespace Resto_Gest
 
         static void Main(string[] args)
         {
+            // Cargar ítems del menú desde la base de datos JSON al iniciar
+            MenuPlatos = ArchivoJson.Cargar<ItemMenu>("menu.json");
+
             // Creamos 5 mesas iniciales automáticamente
             for (int i = 1; i <= 5; i++)
             {
@@ -80,7 +83,7 @@ namespace Resto_Gest
         {
             Console.Clear();
             Console.WriteLine("========================================");
-            Console.WriteLine("       COLA DE PEDIDOS EN COCINA        ");
+            Console.WriteLine("        COLA DE PEDIDOS EN COCINA        ");
             Console.WriteLine("========================================");
             if (Pedidos.Count == 0)
             {
@@ -178,32 +181,65 @@ namespace Resto_Gest
             Console.WriteLine("========================================");
             Console.WriteLine("     REPORTE DE VENTAS DEL TURNO        ");
             Console.WriteLine("========================================");
+            Console.WriteLine("1. Ver Historial de Ventas");
+            Console.WriteLine("2. Anular / Eliminar Venta por ID");
+            Console.Write("Seleccione una opción: ");
+            string op = Console.ReadLine() ?? "";
 
-            // cargar historial desde el archivo JSON
-            List<Venta> historialVentas = ArchivoJson.Cargar<Venta>("Ventas.json");
+            List<Venta> historialVentas = ArchivoJson.Cargar<Venta>("ventas.json");
 
-            if (historialVentas.Count == 0)
-            {
-                Console.WriteLine("\nNo se han registrado ventas en la base de datos aún.");
-            }
-            else
+            if (op == "1")
             {
                 Console.WriteLine("\n--- DETALLE DE VENTAS REGISTRADAS (JSON) ---");
-                decimal totalGeneral = 0;
+                if (historialVentas.Count == 0)
+                {
+                    Console.WriteLine("No se han registrado ventas en la base de datos aún.");
+                }
+                else
+                {
+                    decimal totalGeneral = 0;
+                    foreach (var v in historialVentas)
+                    {
+                        Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Hora: {v.Fecha:HH:mm:ss}");
+                        totalGeneral += v.Total;
+                    }
+                    Console.WriteLine("---------------------------------------");
+                    Console.WriteLine($"Total recaudado en caja hoy: ${totalGeneral:F2}");
+                }
+            }
+            else if (op == "2")
+            {
+                Console.WriteLine("\n--- ANULAR / ELIMINAR VENTA ---");
+                if (historialVentas.Count == 0)
+                {
+                    Console.WriteLine("No hay ventas registradas para eliminar.");
+                    return;
+                }
 
                 foreach (var v in historialVentas)
                 {
-                    Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Hora: {v.Fecha:HH:mm:ss}");
-                    totalGeneral += v.Total;
+                    Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Fecha: {v.Fecha}");
                 }
 
-                Console.WriteLine("---------------------------------------");
-                Console.WriteLine($"Total recaudado en caja hoy: ${totalGeneral:F2}");
+                Console.Write("\nIngrese el ID de la venta a eliminar: ");
+                if (int.TryParse(Console.ReadLine(), out int idVenta))
+                {
+                    Venta? ventaAEliminar = historialVentas.Find(v => v.Id == idVenta);
+
+                    if (ventaAEliminar != null)
+                    {
+                        historialVentas.Remove(ventaAEliminar);
+                        ArchivoJson.Guardar("ventas.json", historialVentas); // Actualizar archivo JSON
+                        Console.WriteLine($"\n¡Venta #{idVenta} eliminada correctamente del reporte JSON!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNo se encontró ninguna venta con ese ID.");
+                    }
+                }
             }
-
-            Console.WriteLine("===========================================");
-
         }
+
         public static void GestionarMenu()
         {
             Console.Clear();
@@ -212,28 +248,33 @@ namespace Resto_Gest
             Console.WriteLine("========================================");
             Console.WriteLine("1. Registrar nuevo Plato/Bebida");
             Console.WriteLine("2. Ver Menú de Platos Registrados");
+            Console.WriteLine("3. Editar Plato/Bebida");
+            Console.WriteLine("4. Eliminar Plato/Bebida");
             Console.Write("Seleccione una opción: ");
-            string op = Console.ReadLine();
+            string op = Console.ReadLine() ?? "";
 
             if (op == "1")
             {
-                Console.Write("Nombre del plato/bebida: ");
-                string nombre = Console.ReadLine();
+                Console.Write("\nNombre del plato/bebida: ");
+                string nombre = Console.ReadLine() ?? "";
 
                 Console.Write("Precio ($): ");
                 double.TryParse(Console.ReadLine(), out double precio);
 
                 Console.Write("Categoría (Plato Fuerte / Entrada / Bebida / Postre): ");
-                string categoria = Console.ReadLine();
+                string categoria = Console.ReadLine() ?? "";
 
-                int nuevoId = MenuPlatos.Count + 1;
-                MenuPlatos.Add(new ItemMenu(nuevoId, nombre, precio, categoria));
+                int nuevoId = MenuPlatos.Count > 0 ? MenuPlatos[MenuPlatos.Count - 1].Id + 1 : 1;
+                ItemMenu nuevoItem = new ItemMenu(nuevoId, nombre, precio, categoria);
 
-                Console.WriteLine("\n¡Plato/Bebida registrado en el menú con éxito!");
+                MenuPlatos.Add(nuevoItem);
+                ArchivoJson.Guardar("menu.json", MenuPlatos); // Guardar cambios en JSON
+
+                Console.WriteLine("\n¡Plato/Bebida registrado y guardado en JSON con éxito!");
             }
             else if (op == "2")
             {
-                Console.WriteLine("\n--- MENÚ ACTUAL DEL RESTAURANTE ---");
+                Console.WriteLine("\n--- MENÚ ACTUAL DEL RESTAURANTE (JSON) ---");
                 if (MenuPlatos.Count == 0)
                 {
                     Console.WriteLine("El menú está vacío por ahora.");
@@ -243,6 +284,80 @@ namespace Resto_Gest
                     foreach (var item in MenuPlatos)
                     {
                         Console.WriteLine($"ID: {item.Id} | {item.Nombre} | Precio: ${item.Precio:F2} | Cat: {item.Categoria}");
+                    }
+                }
+            }
+            else if (op == "3")
+            {
+                Console.WriteLine("\n--- EDITAR ÍTEM DEL MENÚ ---");
+                if (MenuPlatos.Count == 0)
+                {
+                    Console.WriteLine("No hay ítems en el menú para editar.");
+                    return;
+                }
+
+                foreach (var item in MenuPlatos)
+                {
+                    Console.WriteLine($"ID: {item.Id} | {item.Nombre} | Precio: ${item.Precio:F2}");
+                }
+
+                Console.Write("\nIngrese el ID del ítem a editar: ");
+                if (int.TryParse(Console.ReadLine(), out int idEditar))
+                {
+                    ItemMenu? itemAEditar = MenuPlatos.Find(x => x.Id == idEditar);
+
+                    if (itemAEditar != null)
+                    {
+                        Console.Write($"Nuevo Nombre (Actual: {itemAEditar.Nombre}): ");
+                        string nuevoNombre = Console.ReadLine() ?? "";
+                        if (!string.IsNullOrWhiteSpace(nuevoNombre)) itemAEditar.Nombre = nuevoNombre;
+
+                        Console.Write($"Nuevo Precio (Actual: ${itemAEditar.Precio:F2}): ");
+                        string nuevoPrecioStr = Console.ReadLine() ?? "";
+                        if (double.TryParse(nuevoPrecioStr, out double nuevoPrecio)) itemAEditar.Precio = nuevoPrecio;
+
+                        Console.Write($"Nueva Categoría (Actual: {itemAEditar.Categoria}): ");
+                        string nuevaCat = Console.ReadLine() ?? "";
+                        if (!string.IsNullOrWhiteSpace(nuevaCat)) itemAEditar.Categoria = nuevaCat;
+
+                        // Guardar los cambios actualizados en el JSON
+                        ArchivoJson.Guardar("menu.json", MenuPlatos);
+                        Console.WriteLine("\n¡Ítem del menú actualizado con éxito en JSON!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNo se encontró ningún ítem con ese ID.");
+                    }
+                }
+            }
+            else if (op == "4")
+            {
+                Console.WriteLine("\n--- ELIMINAR ÍTEM DEL MENÚ ---");
+                if (MenuPlatos.Count == 0)
+                {
+                    Console.WriteLine("No hay ítems en el menú para eliminar.");
+                    return;
+                }
+
+                foreach (var item in MenuPlatos)
+                {
+                    Console.WriteLine($"ID: {item.Id} | {item.Nombre} | Precio: ${item.Precio:F2}");
+                }
+
+                Console.Write("\nIngrese el ID del ítem a eliminar: ");
+                if (int.TryParse(Console.ReadLine(), out int idEliminar))
+                {
+                    ItemMenu? itemAEliminar = MenuPlatos.Find(x => x.Id == idEliminar);
+
+                    if (itemAEliminar != null)
+                    {
+                        MenuPlatos.Remove(itemAEliminar);
+                        ArchivoJson.Guardar("menu.json", MenuPlatos); // Guardar cambios en JSON
+                        Console.WriteLine("\n¡Ítem eliminado del menú y actualizado en JSON!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNo se encontró ningún ítem con ese ID.");
                     }
                 }
             }
