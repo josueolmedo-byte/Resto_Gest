@@ -144,7 +144,25 @@ namespace Resto_Gest
                         // Eliminar el pedido de la lista activa
                         Pedidos.Remove(pedidoMesa);
 
+                        // =========================================================
+                        //  PERSISTENCIA EN ARCHIVO JSON (Guardar registro de venta)
+                        // =========================================================
+                        List<Venta> historialVentas = ArchivoJson.Cargar<Venta>("ventas.json");
+
+                        Venta nuevaVenta = new Venta
+                        {
+                            Id = historialVentas.Count + 1,
+                            NumeroMesa = numMesa,
+                            Total = (decimal)total,
+                            Fecha = DateTime.Now
+                        };
+
+                        historialVentas.Add(nuevaVenta);
+                        ArchivoJson.Guardar("ventas.json", historialVentas);
+                        // =========================================================
+
                         Console.WriteLine("\n¡Pago procesado con éxito y mesa liberada!");
+                        Console.WriteLine($"[JSON] Venta guardada permanentemente en ventas.json (ID Venta: #{nuevaVenta.Id})");
                     }
                 }
                 else
@@ -160,8 +178,31 @@ namespace Resto_Gest
             Console.WriteLine("========================================");
             Console.WriteLine("     REPORTE DE VENTAS DEL TURNO        ");
             Console.WriteLine("========================================");
-            Console.WriteLine($"Total recaudado en caja hoy: ${TotalVentasDelDia:F2}");
-            Console.WriteLine("========================================");
+
+            // cargar historial desde el archivo JSON
+            List<Venta> historialVentas = ArchivoJson.Cargar<Venta>("Ventas.json");
+
+            if (historialVentas.Count == 0)
+            {
+                Console.WriteLine("\nNo se han registrado ventas en la base de datos aún.");
+            }
+            else
+            {
+                Console.WriteLine("\n--- DETALLE DE VENTAS REGISTRADAS (JSON) ---");
+                decimal totalGeneral = 0;
+
+                foreach (var v in historialVentas)
+                {
+                    Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Hora: {v.Fecha:HH:mm:ss}");
+                    totalGeneral += v.Total;
+                }
+
+                Console.WriteLine("---------------------------------------");
+                Console.WriteLine($"Total recaudado en caja hoy: ${totalGeneral:F2}");
+            }
+
+            Console.WriteLine("===========================================");
+
         }
         public static void GestionarMenu()
         {
