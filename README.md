@@ -10,8 +10,7 @@ Se implementaron las siguientes funcionalidades dentro del sistema:
 - Reporte de Ventas (VerReporteVentas): Muestra el total acumulado de las ventas del turno (TotalVentasDelDia).
 - ArchivoJson creado - clase con métodos estáticos para guardar y cargar datos automáticamente desde archivos .json usando JsonSerializer.
 
-Los módulos correspondientes a la gestión del menú y el control de mesas serán documentados por sus respectivos integrantes.
-
+(Integrante 1 - Josué)
 2026-07-24
   Creación de la clase ItemMenu con sus propiedades y constructor
   Creación de las clases base Mesa y Pedido
