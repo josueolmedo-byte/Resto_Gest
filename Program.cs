@@ -29,18 +29,75 @@ namespace Resto_Gest
             do
             {
                 Console.Clear();
-                Console.WriteLine("========================================");
-                Console.WriteLine("    RESTOGEST - SISTEMA DE PEDIDOS     ");
-                Console.WriteLine("========================================");
-                Console.WriteLine("1. Gestionar Menú (Platos y Bebidas)");
-                Console.WriteLine("2. Ver Estado de Mesas");
-                Console.WriteLine("3. Aperturar Mesa y Registrar Pedido");
-                Console.WriteLine("4. Ver Cola de Pedidos en Cocina");
-                Console.WriteLine("5. Generar Cuenta y Procesar Pago");
-                Console.WriteLine("6. Ver Reporte de Ventas del Turno");
-                Console.WriteLine("7. Salir");
-                Console.WriteLine("========================================");
-                Console.Write("Seleccione una opción: ");
+
+                // Guardar el color original para restaurarlo después
+                ConsoleColor originalColor = Console.ForegroundColor;
+
+                // --- ENCABEZADO ELEGANTE RESTOGEST ---
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(@"╔══════════════════════════════════════════════════════════════════════════════════════════╗");
+                Console.WriteLine(@"║                                                                                          ║");
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(@"║        ██████╗ ███████╗███████╗████████╗██████╗  ██████╗ ███████╗███████╗████████╗       ║");
+                Console.WriteLine(@"║        ██╔══██╗██╔════╝██╔════╝╚══██╔══╝██╔══██╗██╔════╝ ██╔════╝██╔════╝╚══██╔══╝       ║");
+                Console.WriteLine(@"║        ██████╔╝█████╗  ███████╗   ██║   ██║  ██║██║  ███╗█████╗  ███████╗   ██║          ║");
+                Console.WriteLine(@"║        ██╔══██╗██╔══╝  ╚════██║   ██║   ██║  ██║██║   ██║██╔══╝  ╚════██║   ██║          ║");
+                Console.WriteLine(@"║        ██║  ██║███████╗███████║   ██║   ██████╔╝╚██████╔╝███████╗███████║   ██║          ║");
+                Console.WriteLine(@"║        ╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═════╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝          ║");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine(@"║                                                                                          ║");
+                Console.WriteLine(@"║                           S I S T E M A   D E   P E D I D O S                            ║");
+                Console.WriteLine(@"║                                                                                          ║");
+                Console.WriteLine(@"╚══════════════════════════════════════════════════════════════════════════════════════════╝");
+                Console.WriteLine();
+
+                // --- MENÚ DE OPCIONES ---
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [1] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Gestionar Menú (Platos y Bebidas)");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [2] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Ver Estado de Mesas");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [3] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Aperturar Mesa y Registrar Pedido");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [4] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Ver Cola de Pedidos en Cocina");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [5] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Generar Cuenta y Procesar Pago");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("  [6] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Ver Reporte de Ventas del Turno");
+
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("  [7] ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("Salir");
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("────────────────────────────────────────────────────────────────────");
+
+                // --- PROMPT DE ENTRADA ---
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(" ❯ Seleccione una opción: ");
+
+                // Restablecer el color por defecto
+                Console.ForegroundColor = originalColor;
 
                 if (int.TryParse(Console.ReadLine(), out opcion))
                 {
@@ -83,14 +140,51 @@ namespace Resto_Gest
         public static void GestionarMenu()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("        GESTIÓN DEL MENÚ DIGITAL        ");
-            Console.WriteLine("========================================");
-            Console.WriteLine("1. Registrar nuevo Plato/Bebida");
-            Console.WriteLine("2. Ver Menú de Platos Registrados");
-            Console.WriteLine("3. Editar Plato/Bebida");
-            Console.WriteLine("4. Eliminar Plato/Bebida");
-            Console.Write("Seleccione una opción: ");
+
+            // Guardar el color original para restaurarlo después
+            ConsoleColor originalColor = Console.ForegroundColor;
+
+            // --- ENCABEZADO ELEGANTE SUBMENÚ MENÚ DIGITAL ---
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(@"╔══════════════════════════════════════════════════════════════════╗");
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(@"║                  GESTIÓN DEL MENÚ DIGITAL                        ║");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(@"╚══════════════════════════════════════════════════════════════════╝");
+            Console.WriteLine();
+
+            // --- OPCIONES DEL SUBMENÚ ---
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("  [1] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Registrar nuevo Plato/Bebida");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("  [2] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Ver Menú de Platos Registrados");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("  [3] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Editar Plato/Bebida");
+
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("  [4] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("Eliminar Plato/Bebida");
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("────────────────────────────────────────────────────────────────────");
+
+            // --- PROMPT DE ENTRADA ---
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(" ❯ Seleccione una opción: ");
+
+            // Restablecer el color original para la entrada del usuario
+            Console.ForegroundColor = originalColor;
             string op = Console.ReadLine() ?? "";
 
             using (var db = new AppDbContext())
@@ -240,24 +334,32 @@ namespace Resto_Gest
                     var mesa = db.Mesas.Find(numMesa);
                     if (mesa == null)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Mesa no encontrada.");
+                        Console.ResetColor();
                         return;
                     }
 
                     if (mesa.Estado == "Ocupada")
                     {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Esta mesa ya se encuentra ocupada.");
+                        Console.ResetColor();
                         return;
                     }
 
                     var menuDisponible = db.ItemsMenu.ToList();
                     if (menuDisponible.Count == 0)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("\nNo hay platos en el menú. Registre platos primero.");
+                        Console.ResetColor();
                         return;
                     }
 
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("Nombre del mesero responsable: ");
+                    Console.ResetColor();
                     string mesero = Console.ReadLine() ?? "";
 
                     int nuevoIdPedido = Pedidos.Count + 1;
@@ -266,28 +368,39 @@ namespace Resto_Gest
                     string agregarMas = "S";
                     while (agregarMas.ToUpper() == "S")
                     {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("\n--- MENÚ DISPONIBLE ---");
+                        Console.ResetColor();
                         foreach (var item in menuDisponible)
                         {
                             Console.WriteLine($"ID: {item.Id} | {item.Nombre} - ${item.Precio:F2}");
                         }
 
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.Write("Ingrese el ID del plato/bebida a añadir: ");
+                        Console.ResetColor();
+
                         if (int.TryParse(Console.ReadLine(), out int idItem))
                         {
                             var itemElegido = menuDisponible.Find(i => i.Id == idItem);
                             if (itemElegido != null)
                             {
                                 nuevoPedido.Platos.Add(itemElegido);
-                                Console.WriteLine($"¡{itemElegido.Nombre} agregado al pedido!");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"{itemElegido.Nombre} agregado al pedido!");
+                                Console.ResetColor();
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("ID de item no válido.");
+                                Console.ResetColor();
                             }
                         }
 
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.Write("¿Desea agregar otro plato? (S/N): ");
+                        Console.ResetColor();
                         agregarMas = Console.ReadLine() ?? "N";
                     }
 
@@ -297,7 +410,9 @@ namespace Resto_Gest
                         mesa.Estado = "Ocupada";
                         db.SaveChanges();
 
-                        Console.WriteLine($"\n¡Pedido #{nuevoPedido.Id} registrado exitosamente para la Mesa #{numMesa}!");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"\nPedido #{nuevoPedido.Id} registrado exitosamente para la Mesa #{numMesa}!");
+                        Console.ResetColor();
                     }
                 }
             }
@@ -306,19 +421,30 @@ namespace Resto_Gest
         public static void VerColaCocina()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("        COLA DE PEDIDOS EN COCINA        ");
-            Console.WriteLine("========================================");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("==========================================");
+            Console.WriteLine("          COLA DE PEDIDOS EN COCINA       ");
+            Console.WriteLine("==========================================");
+            Console.ResetColor();
+
             if (Pedidos.Count == 0)
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("No hay pedidos registrados en cocina.");
+                Console.ResetColor();
                 return;
             }
 
             foreach (var ped in Pedidos)
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"\nPedido #{ped.Id} | Mesa #{ped.NumeroMesa} | Mesero: {ped.Mesero} | Estado: {ped.Estado}");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("Platos/Bebidas a preparar:");
+                Console.ResetColor();
+
                 foreach (var plato in ped.Platos)
                 {
                     Console.WriteLine($"  - {plato.Nombre} ({plato.Categoria})");
@@ -329,10 +455,15 @@ namespace Resto_Gest
         public static void ProcesarPagoMesa()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("     GENERAR CUENTA Y PROCESAR PAGO     ");
-            Console.WriteLine("========================================");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("==========================================");
+            Console.WriteLine("       GENERAR CUENTA Y PROCESAR PAGO     ");
+            Console.WriteLine("==========================================");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Ingrese el número de mesa a cobrar: ");
+            Console.ResetColor();
 
             if (int.TryParse(Console.ReadLine(), out int numMesa))
             {
@@ -341,7 +472,10 @@ namespace Resto_Gest
                 if (pedidoMesa != null)
                 {
                     double subtotal = 0;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"\n--- DETALLE DE CONSUMO (MESA {numMesa}) ---");
+                    Console.ResetColor();
+
                     foreach (var item in pedidoMesa.Platos)
                     {
                         Console.WriteLine($"- {item.Nombre}: ${item.Precio:F2}");
@@ -351,14 +485,23 @@ namespace Resto_Gest
                     double iva = subtotal * 0.15;
                     double total = subtotal + iva;
 
-                    Console.WriteLine("----------------------------------------");
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("------------------------------------------");
+                    Console.ResetColor();
                     Console.WriteLine($"Subtotal:   ${subtotal:F2}");
                     Console.WriteLine($"IVA (15%):  ${iva:F2}");
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"TOTAL:      ${total:F2}");
-                    Console.WriteLine("----------------------------------------");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("------------------------------------------");
+                    Console.ResetColor();
 
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("¿Confirmar pago y cerrar mesa? (S/N): ");
+                    Console.ResetColor();
                     string op = Console.ReadLine() ?? "";
+
                     if (op.ToUpper() == "S")
                     {
                         using (var db = new AppDbContext())
@@ -380,11 +523,18 @@ namespace Resto_Gest
                             db.SaveChanges();
                         }
 
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("\n--- ENVÍO DE FACTURA DIGITAL ---");
+                        Console.ResetColor();
+
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.Write("Ingrese el correo electrónico del cliente: ");
+                        Console.ResetColor();
                         string correoCliente = Console.ReadLine() ?? "";
 
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.Write("Ingrese el número de celular del cliente (ej: +5939XXXXXXXX): ");
+                        Console.ResetColor();
                         string celularCliente = Console.ReadLine() ?? "";
 
                         if (!string.IsNullOrEmpty(correoCliente))
@@ -399,12 +549,16 @@ namespace Resto_Gest
 
                         Pedidos.Remove(pedidoMesa);
 
-                        Console.WriteLine("\n¡Pago procesado con éxito, mesa liberada y venta registrada en SQL Server!");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\nPago procesado con éxito, mesa liberada y venta registrada en SQL Server!");
+                        Console.ResetColor();
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\nNo se encontró ningún pedido activo para esa mesa.");
+                    Console.ResetColor();
                 }
             }
         }
@@ -412,24 +566,35 @@ namespace Resto_Gest
         public static void VerReporteVentas()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("     REPORTE DE VENTAS DEL TURNO        ");
-            Console.WriteLine("========================================");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("==========================================");
+            Console.WriteLine("        REPORTE DE VENTAS DEL TURNO       ");
+            Console.WriteLine("==========================================");
+            Console.ResetColor();
+
             Console.WriteLine("1. Ver Historial de Ventas");
             Console.WriteLine("2. Anular / Eliminar Venta por ID");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("Seleccione una opción: ");
+            Console.ResetColor();
             string op = Console.ReadLine() ?? "";
 
             using (var db = new AppDbContext())
             {
                 if (op == "1")
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("\n--- DETALLE DE VENTAS REGISTRADAS (SQL SERVER) ---");
+                    Console.ResetColor();
+
                     var historialVentas = db.Ventas.ToList();
 
                     if (historialVentas.Count == 0)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("No se han registrado ventas en la base de datos aún.");
+                        Console.ResetColor();
                     }
                     else
                     {
@@ -439,18 +604,28 @@ namespace Resto_Gest
                             Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Hora: {v.Fecha:HH:mm:ss}");
                             totalGeneral += v.Total;
                         }
-                        Console.WriteLine("---------------------------------------");
+
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine("--------------------------------------------------");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Total recaudado en caja: ${totalGeneral:F2}");
+                        Console.ResetColor();
                     }
                 }
                 else if (op == "2")
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("\n--- ANULAR / ELIMINAR VENTA ---");
+                    Console.ResetColor();
+
                     var historialVentas = db.Ventas.ToList();
 
                     if (historialVentas.Count == 0)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("No hay ventas registradas para eliminar.");
+                        Console.ResetColor();
                         return;
                     }
 
@@ -459,7 +634,10 @@ namespace Resto_Gest
                         Console.WriteLine($"Venta #{v.Id} | Mesa {v.NumeroMesa} | Total: ${v.Total:F2} | Fecha: {v.Fecha}");
                     }
 
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("\nIngrese el ID de la venta a eliminar: ");
+                    Console.ResetColor();
+
                     if (int.TryParse(Console.ReadLine(), out int idVenta))
                     {
                         var ventaAEliminar = db.Ventas.Find(idVenta);
@@ -468,11 +646,16 @@ namespace Resto_Gest
                         {
                             db.Ventas.Remove(ventaAEliminar);
                             db.SaveChanges();
-                            Console.WriteLine($"\n¡Venta #{idVenta} eliminada correctamente de SQL Server!");
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"\nVenta #{idVenta} eliminada correctamente de SQL Server!");
+                            Console.ResetColor();
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\nNo se encontró ninguna venta con ese ID.");
+                            Console.ResetColor();
                         }
                     }
                 }
@@ -498,11 +681,16 @@ namespace Resto_Gest
                 clienteSmtp.EnableSsl = true;
 
                 clienteSmtp.Send(mensaje);
+
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n[EMAIL] ¡Correo de factura enviado exitosamente al destinatario!");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"\n[EMAIL ERROR] No se pudo enviar el correo: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -510,28 +698,27 @@ namespace Resto_Gest
         {
             try
             {
-                // Limpiamos el número por si acaso
                 string numeroLimpio = numeroCelular.Replace("+", "").Trim();
-
-                // Codificamos el mensaje para que la URL lo entienda sin espacios ni tildes extrañas
                 string mensajeCodificado = Uri.EscapeDataString(mensajeTexto);
-
-                // Creamos la URL oficial de WhatsApp
                 string urlWhatsApp = $"https://wa.me/{numeroLimpio}?text={mensajeCodificado}";
 
-                // Abrimos el navegador o la app predeterminada de Windows con el mensaje preparado
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = urlWhatsApp,
                     UseShellExecute = true
                 });
 
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n[WHATSAPP] ¡Ventana de WhatsApp abierta con la factura lista para enviar!");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"\n[WHATSAPP ERROR] No se pudo abrir WhatsApp: {ex.Message}");
+                Console.ResetColor();
             }
         }
+
     }
 }
