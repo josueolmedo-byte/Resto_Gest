@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace Resto_Gest
 {
     public class Pedido
     {
+        [Key]
         public int Id { get; set; }
         public int NumeroMesa { get; set; }
         public List<ItemMenu> Platos { get; set; } = new List<ItemMenu>();

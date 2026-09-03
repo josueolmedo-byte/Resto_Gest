@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace Resto_Gest
     public class ItemMenu
     {
         // Cambiamos 'private' por 'public' para que Program.cs pueda leerlas
+        [Key]
         public int Id { get; set; }
         public string Nombre { get; set; }
         public double Precio { get; set; }
