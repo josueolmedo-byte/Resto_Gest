@@ -208,7 +208,7 @@ namespace Resto_Gest
                 }
                 else if (op == "2")
                 {
-                    Console.WriteLine("\n--- MENÚ ACTUAL DEL RESTAURANTE (SQL SERVER) ---");
+                    Console.WriteLine("\n══ MENÚ ACTUAL DEL RESTAURANTE (SQL SERVER) ══");
                     var listaMenu = db.ItemsMenu.ToList();
 
                     if (listaMenu.Count == 0)
@@ -225,7 +225,7 @@ namespace Resto_Gest
                 }
                 else if (op == "3")
                 {
-                    Console.WriteLine("\n--- EDITAR ÍTEM DEL MENÚ ---");
+                    Console.WriteLine("\n══ EDITAR ÍTEM DEL MENÚ ══");
                     var listaMenu = db.ItemsMenu.ToList();
                     if (listaMenu.Count == 0)
                     {
@@ -268,7 +268,7 @@ namespace Resto_Gest
                 }
                 else if (op == "4")
                 {
-                    Console.WriteLine("\n--- ELIMINAR ÍTEM DEL MENÚ ---");
+                    Console.WriteLine("\n══ ELIMINAR ÍTEM DEL MENÚ ══");
                     var listaMenu = db.ItemsMenu.ToList();
                     if (listaMenu.Count == 0)
                     {
@@ -304,9 +304,9 @@ namespace Resto_Gest
         public static void VerEstadoMesas()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("          ESTADO DE LAS MESAS           ");
-            Console.WriteLine("========================================");
+            Console.WriteLine("╔════════════════════════════════════════╗");
+            Console.WriteLine("║          ESTADO DE LAS MESAS           ║");
+            Console.WriteLine("╚════════════════════════════════════════╝");
 
             using (var db = new AppDbContext())
             {
@@ -322,16 +322,22 @@ namespace Resto_Gest
         public static void AperturarMesaYPedido()
         {
             Console.Clear();
-            Console.WriteLine("========================================");
-            Console.WriteLine("    APERTURAR MESA Y REGISTRAR PEDIDO   ");
-            Console.WriteLine("========================================");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("╔════════════════════════════════════════╗");
+            Console.WriteLine("║        APERTURAR MESA Y TOMAR PEDIDO   ║");
+            Console.WriteLine("╚════════════════════════════════════════╝");
+            Console.ResetColor();
 
-            Console.Write("Ingrese el número de mesa (1 al 5): ");
-            if (int.TryParse(Console.ReadLine(), out int numMesa))
+            using (var db = new AppDbContext())
             {
-                using (var db = new AppDbContext())
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("Ingrese el número de mesa a aperturar: ");
+                Console.ResetColor();
+
+                if (int.TryParse(Console.ReadLine(), out int numMesa))
                 {
                     var mesa = db.Mesas.Find(numMesa);
+
                     if (mesa == null)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -369,7 +375,7 @@ namespace Resto_Gest
                     while (agregarMas.ToUpper() == "S")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("\n--- MENÚ DISPONIBLE ---");
+                        Console.WriteLine("\n══ MENÚ DISPONIBLE ══");
                         Console.ResetColor();
                         foreach (var item in menuDisponible)
                         {
@@ -386,8 +392,19 @@ namespace Resto_Gest
                             if (itemElegido != null)
                             {
                                 nuevoPedido.Platos.Add(itemElegido);
+
+                                // Contamos si el mismo plato se ha pedido repetido en este pedido
+                                int cantidadActual = nuevoPedido.Platos.Count(p => p.Id == itemElegido.Id);
+
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine($"{itemElegido.Nombre} agregado al pedido!");
+                                if (cantidadActual > 1)
+                                {
+                                    Console.WriteLine($"{itemElegido.Nombre} agregado al pedido! (x{cantidadActual})");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"{itemElegido.Nombre} agregado al pedido!");
+                                }
                                 Console.ResetColor();
                             }
                             else
@@ -422,9 +439,9 @@ namespace Resto_Gest
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("==========================================");
-            Console.WriteLine("          COLA DE PEDIDOS EN COCINA       ");
-            Console.WriteLine("==========================================");
+            Console.WriteLine("╔════════════════════════════════════════╗");
+            Console.WriteLine("║          COLA DE PEDIDOS EN COCINA     ║");
+            Console.WriteLine("╚════════════════════════════════════════╝");
             Console.ResetColor();
 
             if (Pedidos.Count == 0)
@@ -445,9 +462,22 @@ namespace Resto_Gest
                 Console.WriteLine("Platos/Bebidas a preparar:");
                 Console.ResetColor();
 
-                foreach (var plato in ped.Platos)
+                // Agrupación por ID para consolidar repetidos en cocina
+                var platosAgrupados = ped.Platos.GroupBy(p => p.Id);
+
+                foreach (var grupo in platosAgrupados)
                 {
-                    Console.WriteLine($"  - {plato.Nombre} ({plato.Categoria})");
+                    var plato = grupo.First();
+                    int cantidad = grupo.Count();
+
+                    if (cantidad > 1)
+                    {
+                        Console.WriteLine($"  - {plato.Nombre} ({plato.Categoria}) x{cantidad}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"  - {plato.Nombre} ({plato.Categoria})");
+                    }
                 }
             }
         }
@@ -456,9 +486,9 @@ namespace Resto_Gest
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("==========================================");
-            Console.WriteLine("       GENERAR CUENTA Y PROCESAR PAGO     ");
-            Console.WriteLine("==========================================");
+            Console.WriteLine("╔════════════════════════════════════════╗");
+            Console.WriteLine("║       GENERAR CUENTA Y PROCESAR PAGO   ║");
+            Console.WriteLine("╚════════════════════════════════════════╝");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -473,20 +503,35 @@ namespace Resto_Gest
                 {
                     double subtotal = 0;
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"\n--- DETALLE DE CONSUMO (MESA {numMesa}) ---");
+                    Console.WriteLine($"\n══ DETALLE DE CONSUMO (MESA {numMesa}) ══");
                     Console.ResetColor();
 
-                    foreach (var item in pedidoMesa.Platos)
+                    // Agrupación de items repetidos y cálculo acumulado
+                    var platosAgrupados = pedidoMesa.Platos.GroupBy(p => p.Id);
+
+                    foreach (var grupo in platosAgrupados)
                     {
-                        Console.WriteLine($"- {item.Nombre}: ${item.Precio:F2}");
-                        subtotal += item.Precio;
+                        var item = grupo.First();
+                        int cantidad = grupo.Count();
+                        double totalItem = item.Precio * cantidad;
+
+                        if (cantidad > 1)
+                        {
+                            Console.WriteLine($"- {item.Nombre} x{cantidad}: ${totalItem:F2} (${item.Precio:F2} c/u)");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"- {item.Nombre}: ${item.Precio:F2}");
+                        }
+
+                        subtotal += totalItem;
                     }
 
                     double iva = subtotal * 0.15;
                     double total = subtotal + iva;
 
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine("════════════════════════════════════════════════");
                     Console.ResetColor();
                     Console.WriteLine($"Subtotal:   ${subtotal:F2}");
                     Console.WriteLine($"IVA (15%):  ${iva:F2}");
@@ -494,7 +539,7 @@ namespace Resto_Gest
                     Console.WriteLine($"TOTAL:      ${total:F2}");
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine("════════════════════════════════════════════════");
                     Console.ResetColor();
 
                     Console.ForegroundColor = ConsoleColor.Cyan;
@@ -524,7 +569,7 @@ namespace Resto_Gest
                         }
 
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("\n--- ENVÍO DE FACTURA DIGITAL ---");
+                        Console.WriteLine("\n══ ENVÍO DE FACTURA DIGITAL ══");
                         Console.ResetColor();
 
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -567,9 +612,9 @@ namespace Resto_Gest
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.WriteLine("==========================================");
-            Console.WriteLine("        REPORTE DE VENTAS DEL TURNO       ");
-            Console.WriteLine("==========================================");
+            Console.WriteLine("╔════════════════════════════════════════╗");
+            Console.WriteLine("║        REPORTE DE VENTAS DEL TURNO     ║");
+            Console.WriteLine("╚════════════════════════════════════════╝");
             Console.ResetColor();
 
             Console.WriteLine("1. Ver Historial de Ventas");
@@ -585,7 +630,7 @@ namespace Resto_Gest
                 if (op == "1")
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n--- DETALLE DE VENTAS REGISTRADAS (SQL SERVER) ---");
+                    Console.WriteLine("\n══ DETALLE DE VENTAS REGISTRADAS (SQL SERVER) ══");
                     Console.ResetColor();
 
                     var historialVentas = db.Ventas.ToList();
@@ -606,7 +651,7 @@ namespace Resto_Gest
                         }
 
                         Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine("--------------------------------------------------");
+                        Console.WriteLine("════════════════════════════════════════════════");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Total recaudado en caja: ${totalGeneral:F2}");
@@ -616,7 +661,7 @@ namespace Resto_Gest
                 else if (op == "2")
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n--- ANULAR / ELIMINAR VENTA ---");
+                    Console.WriteLine("\n══ ANULAR / ELIMINAR VENTA ══");
                     Console.ResetColor();
 
                     var historialVentas = db.Ventas.ToList();
